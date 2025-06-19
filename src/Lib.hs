@@ -169,11 +169,11 @@ rain3 = stimes (100000 :: Int) rain0
 
 ---
 
-scanBin' :: (a -> b -> b) -> b -> Scan a b
-scanBin' b s = MkScan (\a -> MkSt (\k s' -> let r = b a s' in k r r)) (evalStatek s)
+scanBinK :: (a -> b -> b) -> b -> Scan a b
+scanBinK b s = MkScan (\a -> MkSt (\k s' -> let r = b a s' in k r r)) (evalStatek s)
 
-scanMax'' :: Scan Int Int
-scanMax'' = scanBin' max 0
+scanMaxK :: Scan Int Int
+scanMaxK = scanBinK max 0
 
 newtype Statek s a = MkSt { unSt :: forall r. (a -> s -> r) -> s -> r }
   deriving (Functor)
@@ -187,3 +187,20 @@ instance Applicative (Statek s) where
 
 instance Monad (Statek s) where
   (MkSt a) >>= f = MkSt $ \k s -> a (\x s' -> unSt (f x) k s') s
+
+---
+
+-- Equivalent to `Compose (Writer (Endo s)) (Reader s)` but using deriving via
+-- would require obsuring the type, it's almost as fast to do by hand.
+data WState s a = MkWSt (s -> s) (s -> a)
+  deriving (Functor)
+
+evalWState :: s -> WState s a -> a
+evalWState s (MkWSt f d) = d (f s)
+
+instance Applicative (WState s) where
+  pure a = MkWSt id (const a)
+  (MkWSt fs fd) <*> (MkWSt as ad) = MkWSt (as . fs) (fd <*> ad)
+
+scanBinW :: (a -> b -> b) -> b -> Scan a b
+scanBinW b s = MkScan (\a -> MkWSt (b a) id) (evalWState s)
