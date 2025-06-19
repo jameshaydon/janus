@@ -1,4 +1,3 @@
-{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE Arrows #-}
 {-# LANGUAGE RecordWildCards #-}
 
