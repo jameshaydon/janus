@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE Arrows #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ImportQualifiedPost #-}
@@ -96,6 +97,8 @@ instance Arrow Scan where
   (MkScan f1 g1) &&& (MkScan f2 g2) =
     MkScan (\a -> MkDay (f1 a) (f2 a) (,))
            (runDay g1 g2)
+  first (MkScan f g) = MkScan (\(a, c) -> (,c) <$> f a) g
+  second (MkScan f g) = MkScan (\(c, a) -> (c,) <$> f a) g
 
 scan :: Traversable t => Scan a b -> t a -> t b
 scan (MkScan f g) xs = g $ traverse f xs
