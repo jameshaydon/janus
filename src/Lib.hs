@@ -1,11 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 {-# LANGUAGE Arrows #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE ImportQualifiedPost #-}
-{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE DeriveFunctor #-}
 
 module Lib (trappedRain0,
             trappedRain1,

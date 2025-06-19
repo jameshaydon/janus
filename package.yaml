@@ -25,6 +25,8 @@ dependencies:
 - lens
 - foldl
 
+language: "GHC2024"
+
 ghc-options:
 - -Wall
 - -Wcompat
