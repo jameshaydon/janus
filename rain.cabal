@@ -74,3 +74,22 @@ test-suite rain-test
     , mtl
     , rain
   default-language: GHC2024
+
+benchmark rain-bench
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Paths_rain
+  autogen-modules:
+      Paths_rain
+  hs-source-dirs:
+      bench
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , foldl
+    , lens
+    , mtl
+    , rain
+    , tasty-bench
+  default-language: GHC2024
